@@ -1,5 +1,5 @@
 {
-  "name": "test-project-20210119",
+  "name": "voypost-test-7b0e8",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,6 +12,7 @@
     "@mui/styles": "^5.0.2",
     "@mui/system": "^5.0.6",
     "@testing-library/jest-dom": "^5.14.1",
+    "create-react-app": "^3.4.0",
     "firebase": "^8.2.6",
     "formik": "^2.2.6",
     "interactjs": "^1.10.11",
@@ -23,6 +24,7 @@
     "reactfire": "^3.0.0-rc.0",
     "typescript": "^4.3.2",
     "web-vitals": "^0.2.4",
+    "yarn": "^1.22.17",
     "yup": "^0.32.9"
   },
   "devDependencies": {
