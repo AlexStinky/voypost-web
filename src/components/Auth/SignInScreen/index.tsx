@@ -188,12 +188,18 @@ const SignInScreen: React.FC = () => {
                   {
                     disableUnderline: true,
                     endAdornment: (
-                      <InputAdornment position="end">
+                      <InputAdornment
+                        position="end"
+                        sx={{
+                          pl: '300px',
+                        }}
+                      >
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={handleClickShowPassword}
                           onMouseDown={handleMouseDownPassword}
                           edge="end"
+                          sx={{ mb: '55px' }}
                         >
                           {values.showPassword ? (
                             <VisibilityOff />
