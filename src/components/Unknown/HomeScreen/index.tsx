@@ -4,20 +4,17 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import Avatar from '@mui/material/Avatar';
 import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 
-import fire from '../../../common/firebaseApp';
+import app from '../../../common/firebaseApp';
+import clearFirestoreCache from '../../../common/clearFirestoreCache';
 
 const HomeScreen: React.FC = () => {
-  const [auth, setAuth] = React.useState(true);
+  const [auth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAuth(event.target.checked);
-  };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -25,11 +22,13 @@ const HomeScreen: React.FC = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+    console.log(app.auth());
   };
 
   const handleLogout = () => {
     setAnchorEl(null);
-    fire.auth().signOut();
+    app.auth().signOut();
+    clearFirestoreCache();
   };
 
   return (
@@ -58,7 +57,7 @@ const HomeScreen: React.FC = () => {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <AccountCircle />
+                <Avatar>U</Avatar>
               </IconButton>
               <Menu
                 id="menu-appbar"

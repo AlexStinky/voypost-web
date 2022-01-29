@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import CssBaseline from '@mui/material/CssBaseline';
 import Paper from '@mui/material/Paper';
-import Button, { ButtonProps } from '@mui/material/Button';
+import { ButtonProps } from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Typography, { TypographyProps } from '@mui/material/Typography';
@@ -16,7 +16,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { UIContext } from '../../Unknown/UIContext';
 
-import fire from '../../../common/firebaseApp';
+import app from '../../../common/firebaseApp';
+
+const sleep = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Theme = createTheme();
 
@@ -87,31 +89,39 @@ const SignInScreen: React.FC = () => {
     showPassword: false,
   });
 
-  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     setLoading(true);
-    fire
-      .auth()
-      .signInWithEmailAndPassword(values.email, values.password)
-      .then((response) => {
-        const { user } = response;
-        const data = {
-          userId: user!.uid,
-          email: user!.email,
-        };
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-      });
-  };
 
-  const handleSignIn = React.useCallback(async () => {
-    setAlert({
-      show: true,
-      severity: 'info',
-      message: '',
-    });
-  }, [setAlert]);
+    if (values.email !== '' && values.password !== '') {
+      app
+        .auth()
+        .signInWithEmailAndPassword(values.email, values.password)
+        .then(() => {
+          setLoading(false);
+        })
+        .catch(async () => {
+          setAlert({
+            show: true,
+            severity: 'info',
+            message: 'Пользователь не найден либо неверный email/пароль',
+          });
+
+          await sleep(1000);
+
+          setLoading(false);
+        });
+    } else {
+      setAlert({
+        show: true,
+        severity: 'info',
+        message: 'Введите email и пароль',
+      });
+
+      await sleep(1000);
+
+      setLoading(false);
+    }
+  };
 
   const handleClickShowPassword = () => {
     setValues({
@@ -161,7 +171,6 @@ const SignInScreen: React.FC = () => {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSignIn}
               sx={{
                 mt: 1,
                 display: 'flex',
@@ -170,6 +179,7 @@ const SignInScreen: React.FC = () => {
               }}
             >
               <LoginField
+                required
                 fullWidth
                 label="Email"
                 id="email-input"
@@ -177,6 +187,7 @@ const SignInScreen: React.FC = () => {
                 onChange={handleChange('email')}
               />
               <LoginField
+                required
                 fullWidth
                 label="Password"
                 id="password-input"
